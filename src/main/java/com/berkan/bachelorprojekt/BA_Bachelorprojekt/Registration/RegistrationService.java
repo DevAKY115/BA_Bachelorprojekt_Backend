@@ -19,8 +19,6 @@ public class RegistrationService {
     public User register(User user){
 
 
-        System.out.println(repository.findByEmail(user.getEmail()).isPresent());
-
         if(repository.findByEmail(user.getEmail()).isPresent()){
             throw new UserException("User with this e-mail already exists");
         }

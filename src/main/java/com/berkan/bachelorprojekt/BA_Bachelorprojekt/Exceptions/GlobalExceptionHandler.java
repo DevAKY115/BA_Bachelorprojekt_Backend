@@ -16,7 +16,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String bodyOfResponse = "User Error: " + ex.getMessage();
 
         return new ResponseEntity<>(bodyOfResponse, HttpStatus.BAD_REQUEST);
-
     }
 
     @ExceptionHandler(value = {XRToolError.class})

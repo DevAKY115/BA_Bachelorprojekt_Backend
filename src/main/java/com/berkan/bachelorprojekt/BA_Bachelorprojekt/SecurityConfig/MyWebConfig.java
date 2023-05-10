@@ -1,3 +1,4 @@
+/*
 package com.berkan.bachelorprojekt.BA_Bachelorprojekt.SecurityConfig;
 
 import com.berkan.bachelorprojekt.BA_Bachelorprojekt.User.UserService;
@@ -21,7 +22,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-/*
 
 @Configuration
 @EnableWebSecurity
@@ -61,11 +61,10 @@ public class MyWebConfig {
     }
 
 
-*/
-/*    @Bean
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationManagerBuilder builder) throws Exception {
         return builder.userDetailsService(userService).and().build();
-    }*//*
+    }
 
 
     @Bean

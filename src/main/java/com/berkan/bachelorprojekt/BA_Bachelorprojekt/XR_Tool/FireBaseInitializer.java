@@ -34,12 +34,10 @@ public class FireBaseInitializer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
 
     public static void uploadFile(String titel, MultipartFile multipartFile) throws IOException {
-
         try {
             Storage storage = StorageClient.getInstance().bucket().getStorage();
 
@@ -50,7 +48,6 @@ public class FireBaseInitializer {
         }catch (StorageException storageException){
             throw new XRToolError("Couldn't connect to the filestorage server");
         }
-
     }
 
     public static String getFile(String titel, String filename){
@@ -89,15 +86,12 @@ public class FireBaseInitializer {
     public static void deleteFile(String toolTitel, String filename){
 
         try{
+            Storage storage = StorageClient.getInstance().bucket().getStorage();
 
-        Storage storage = StorageClient.getInstance().bucket().getStorage();
-
-        storage.delete(BlobId.of("berkan-akkaya-bachelorprojekt.appspot.com", toolTitel + "/" + filename));
-
+            storage.delete(BlobId.of("berkan-akkaya-bachelorprojekt.appspot.com", toolTitel + "/" + filename));
         }catch (StorageException storageException){
             throw new XRToolError("File couldn't be deleted from the filestorage server");
         }
-
     }
 
 

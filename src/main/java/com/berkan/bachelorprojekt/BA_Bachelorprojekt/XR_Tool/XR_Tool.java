@@ -42,12 +42,12 @@ public class XR_Tool {
     private String fileTypes;
 
 
-    @Transient
+/*    @Transient
     private String titelbildBase64;
     @Transient
     private String[] bilderBase64;
     @Transient
-    private String[] extraFilesBase64;
+    private String[] extraFilesBase64;*/
 
     @Transient
     private String titelbildURL;
@@ -225,7 +225,7 @@ public class XR_Tool {
         this.steckbrief = steckbrief;
     }
 
-    public String getTitelbildBase64() {
+/*    public String getTitelbildBase64() {
         return titelbildBase64;
     }
 
@@ -247,7 +247,7 @@ public class XR_Tool {
 
     public void setExtraFilesBase64(String[] extraFilesBase64) {
         this.extraFilesBase64 = extraFilesBase64;
-    }
+    }*/
 
     public String getMusterprojekt() {
         return musterprojekt;
@@ -297,34 +297,4 @@ public class XR_Tool {
         this.extraFilesURL = extraFilesURL;
     }
 
-    @Override
-    public String toString() {
-        return "XR_Tool{" +
-                "titel='" + titel + '\'' +
-                ", kurzbeschreibung='" + kurzbeschreibung + '\'' +
-                ", beschreibung='" + beschreibung + '\'' +
-                ", xr_kontext='" + xr_kontext + '\'' +
-                ", coding=" + coding +
-                ", konzept=" + konzept +
-                ", illustration=" + illustration +
-                ", design=" + design +
-                ", modelling_3D=" + modelling_3D +
-                ", animation=" + animation +
-                ", anforderungs_analyse=" + anforderungs_analyse +
-                ", anforderungs_definition=" + anforderungs_definition +
-                ", ideenskizze=" + ideenskizze +
-                ", strukturen=" + strukturen +
-                ", low_fidelity=" + low_fidelity +
-                ", high_fidelity=" + high_fidelity +
-                ", software_entwicklung=" + software_entwicklung +
-                ", titelbild='" + titelbild + '\'' +
-                ", bilder='" + bilder + '\'' +
-                ", extraFiles='" + extraFiles + '\'' +
-                ", steckbrief='" + steckbrief + '\'' +
-                ", musterprojekt='" + musterprojekt + '\'' +
-                ", titelbildBase64='" + titelbildBase64 + '\'' +
-                ", bilderBase64=" + Arrays.toString(bilderBase64) +
-                ", extraFilesBase64=" + Arrays.toString(extraFilesBase64) +
-                '}';
-    }
 }

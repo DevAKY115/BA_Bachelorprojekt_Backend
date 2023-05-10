@@ -28,8 +28,6 @@ public class XR_ToolController {
 
         if(service.findToolByTitel(titel)){
             throw new XRToolError("Es existiert bereits ein XR-Tool mit diesem Titel. Bitte wählen Sie einen anderen Titel.");
-//            return new ResponseEntity<>("Es existiert bereits ein XR-Tool mit diesem Titel. \n" +
-//                    "Bitte wählen Sie einen anderen Titel.", HttpStatus.BAD_REQUEST);
         }
 
         if(     titel.isEmpty() || titel.length() < 3 ||
@@ -42,18 +40,15 @@ public class XR_ToolController {
                 titelbild.isEmpty()
         ){
             throw new XRToolError("Formular ist nicht komplett oder inkorrekt ausgefüllt");
-//            return new ResponseEntity<>("Formular ist nicht komplett oder inkorrekt ausgefüllt", HttpStatus.BAD_REQUEST);
         }
 
         if(!titelbild.getContentType().matches("image/.+")){
             throw new XRToolError("Titelbild darf nur eine Bilddatei sein");
-//            return new ResponseEntity<>("Titelbild darf nur eine Bilddatei sein", HttpStatus.BAD_REQUEST);
         }
 
         for (MultipartFile multipartFile : bilder) {
             if (!multipartFile.getContentType().matches("image/.+")) {
                 throw new XRToolError("Bilder dürfen nur aus Bilddateien bestehen");
-//                return new ResponseEntity<>("Bilder dürfen nur aus Bilddateien bestehen", HttpStatus.BAD_REQUEST);
             }
         }
 
@@ -63,13 +58,11 @@ public class XR_ToolController {
 
             if(i<0 || i > 2){
                 throw new XRToolError("Fehler: Projektphasen außerhalb zulässigen Wertebereichs");
-//                return new ResponseEntity<>("Fehler: Projektphasen außerhalb zulässigen Wertebereichs", HttpStatus.BAD_REQUEST);
             }
         }
 
         if(sum == 0){
             throw new XRToolError("Bitte wählen Sie mindestens eine Projektphase");
-//            return new ResponseEntity<>("Bitte wählen Sie mindestens eine Projektphase", HttpStatus.BAD_REQUEST);
         }
 
         sum = 0;
@@ -77,13 +70,11 @@ public class XR_ToolController {
             sum += i;
             if(i < 0 || i > 3){
                 throw new XRToolError("Fehler: Skillmatrix außerhalb zulässigen Wertebereichs");
-//                return new ResponseEntity<>("Fehler: Skillmatrix außerhalb zulässigen Wertebereichs", HttpStatus.BAD_REQUEST);
             }
         }
 
         if(sum == 0){
             throw new XRToolError("Bitte füllen Sie die Skillmatrix aus");
-//            return new ResponseEntity<>("Bitte füllen Sie die Skillmatrix aus", HttpStatus.BAD_REQUEST);
         }
 
         XR_Tool tool = new XR_Tool();
@@ -145,15 +136,15 @@ public class XR_ToolController {
 
 
 
-        service.createXR_Tool(tool, titelbild, bilder, extra_material);
-
-        return new ResponseEntity<>("Created XR-Tool", HttpStatus.CREATED);
+        if(service.createXR_Tool(tool, titelbild, bilder, extra_material)) {
+            return new ResponseEntity<>("Created XR-Tool", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("An unknown error occurred", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(path = "/xrtool/{titel}")
-    public XR_Tool getToolByTitle(@PathVariable String titel) throws SQLException {
-
-//        throw new UserNotFoundException();
+    public XR_Tool getToolByTitle(@PathVariable String titel){
         return service.getToolByTitel(titel);
     }
 

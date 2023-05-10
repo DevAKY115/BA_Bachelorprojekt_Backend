@@ -27,7 +27,7 @@ public class XR_ToolService {
      * @param extra_material Die Extra Material Dateien.
      * @throws IOException
      */
-    public void createXR_Tool(XR_Tool tool, MultipartFile titelbild,
+    public boolean createXR_Tool(XR_Tool tool, MultipartFile titelbild,
                               MultipartFile[] bilder, MultipartFile[] extra_material) throws IOException {
 
         for(MultipartFile file: bilder){
@@ -43,6 +43,7 @@ public class XR_ToolService {
         FireBaseInitializer.uploadFile(tool.getTitel(), titelbild);
 
         repository.save(tool);
+        return true;
     }
 
     /**
@@ -58,35 +59,57 @@ public class XR_ToolService {
             String titelbild = tool.getTitelbild();
 
             String[] bilder = tool.getBilder().split(":::");
-            String[] bilderBase64 = new String[bilder.length];
+//            String[] bilderBase64 = new String[bilder.length];
             String[] bilderURL = new String[bilder.length];
 
-            tool.setTitelbildBase64(FireBaseInitializer.getFile(tool.getTitel(), titelbild));
+//            tool.setTitelbildBase64(FireBaseInitializer.getFile(tool.getTitel(), titelbild));
             tool.setTitelbildURL(FireBaseInitializer.getFileURL(tool.getTitel(), titelbild));
 
             for(int i = 0; i < bilder.length; i++){
-                bilderBase64[i] = FireBaseInitializer.getFile(tool.getTitel(), bilder[i]);
+//                bilderBase64[i] = FireBaseInitializer.getFile(tool.getTitel(), bilder[i]);
                 bilderURL[i] = FireBaseInitializer.getFileURL(tool.getTitel(), bilder[i]);
             }
 
-            tool.setBilderBase64(bilderBase64);
+//            tool.setBilderBase64(bilderBase64);
             tool.setBilderURL(bilderURL);
 
             if(!tool.getExtraFiles().isEmpty()){
 
                 String[] extra_material = tool.getExtraFiles().split(":::");
-                String[] extra_materialBase64 = new String[extra_material.length];
+//                String[] extra_materialBase64 = new String[extra_material.length];
                 String[] extraFilesURL = new String[extra_material.length];
 
                 for(int i = 0; i < extra_material.length; i++){
-                    extra_materialBase64[i] = FireBaseInitializer.getFile(titel, extra_material[i]);
+//                    extra_materialBase64[i] = FireBaseInitializer.getFile(titel, extra_material[i]);
                     extraFilesURL[i] = FireBaseInitializer.getFileURL(titel, extra_material[i]);
                 }
 
-                tool.setExtraFilesBase64(extra_materialBase64);
+//                tool.setExtraFilesBase64(extra_materialBase64);
                 tool.setExtraFilesURL(extraFilesURL);
             }
 
+
+            return tool;
+
+        }else {
+
+            throw new XRToolError("No tool with this title");
+        }
+    }
+
+    /**
+     * Entnimmt der Datenbank das XR-Tool, und holt nur das Titelbild aus dem Firebase Storage.
+     * @param titel Der Titel des XR-Tools nachdem gesucht wird.
+     * @return XR-Tool
+     */
+    public XR_Tool getToolSearchResult(String titel){
+        if(findToolByTitel(titel)){
+
+            XR_Tool tool = repository.findById(titel).get();
+
+            String titelbild = tool.getTitelbild();
+
+            tool.setTitelbildURL(FireBaseInitializer.getFileURL(tool.getTitel(), titelbild));
 
             return tool;
 
@@ -114,7 +137,6 @@ public class XR_ToolService {
      */
     public void deleteOldFiles(String toolTitel){
 
-
         XR_Tool oldTool = getToolByTitel(toolTitel);
 
         String titelbildName = oldTool.getTitelbild();
@@ -130,7 +152,6 @@ public class XR_ToolService {
         for(String filename : extraFilesNamen){
             FireBaseInitializer.deleteFile(toolTitel, filename);
         }
-
     }
 
     /**
@@ -216,7 +237,9 @@ public class XR_ToolService {
 
         String titel;
 
-        for(int i = 0; i < 8; i ++){
+        int resultSize = (scoreList.size() < 8) ? scoreList.size() : 8;
+
+        for(int i = 0; i < resultSize; i ++){
 
             titel = getKey(scoreMap, scoreList.get(scoreList.size() -1 - i));
             if(titel != null){
@@ -256,11 +279,12 @@ public class XR_ToolService {
 
         resultList.clear();
 
-        for(int i = 0; i < 8; i ++){
+        for(int i = 0; i < resultSize; i ++){
 
             titel = getKey(scoreMap, scoreList.get(scoreList.size() -1 - i));
             if(titel != null){
-                resultList.add(getToolByTitel(titel));
+//                resultList.add(getToolByTitel(titel));   hier werden alle Dateien mitgeschickt
+                resultList.add(getToolSearchResult(titel));     // hier nur das Titelbild mitgeschickt
             }
 
         }
@@ -329,8 +353,9 @@ public class XR_ToolService {
         Collections.sort(scoreList);
 
         String titel;
+        int resultSize = (scoreList.size() < 8) ? scoreList.size() : 8;
 
-        for(int i = 0; i < 8; i ++){
+        for(int i = 0; i < resultSize; i ++){
 
             titel = getKey(scoreMap, scoreList.get(scoreList.size() -1 - i));
             if(titel != null){
