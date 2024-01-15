@@ -211,7 +211,6 @@ public class XR_ToolService {
                     score -= 3;
                 } else if(Math.abs(toolValues[i] - queryValues[i]) >= 2){
                     score -= 1;
-
                 }
             }
 
@@ -246,6 +245,11 @@ public class XR_ToolService {
                 resultList.add(repository.findById(titel).get());
             }
 
+        }
+
+
+        for(XR_Tool tool : resultList){
+            System.out.println(tool.getTitel());
         }
 
         String toolText = "";
@@ -287,6 +291,10 @@ public class XR_ToolService {
                 resultList.add(getToolSearchResult(titel));     // hier nur das Titelbild mitgeschickt
             }
 
+        }
+
+        for(XR_Tool tool : resultList){
+            System.out.println(tool.getTitel());
         }
 
         return resultList;
